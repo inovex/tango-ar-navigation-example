@@ -70,14 +70,6 @@ public class MainActivity extends AppCompatActivity implements Tango.OnTangoUpda
     @Bind(R.id.map_view)
     MapView mapView;
 
-
-    /**
-     * get the extrinsics transformations for the color and depth camera
-     * and also the relative transformation to the device.
-     *
-     * @param tango API interface
-     * @return the device extrinsics of the color camera
-     */
     private static DeviceExtrinsics setupExtrinsics(Tango tango) {
         // Create camera to IMU transform.
         TangoCoordinateFramePair framePair = new TangoCoordinateFramePair();
@@ -128,22 +120,17 @@ public class MainActivity extends AppCompatActivity implements Tango.OnTangoUpda
         }
     }
 
-    private void message(final int message_resource) {
-        Toast.makeText(this, message_resource, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
-    public void onFrameAvailable(int cameraId) {
-        if (cameraId == ACTIVE_CAMERA_INTRINSICS) {
-            tangoFrameIsAvailable.set(true);
-            mainSurfaceView.requestRender();
-        }
-    }
-
-    @Override
-    public void onTangoEvent(TangoEvent event) {
-        if (tangoUx != null) {
-            tangoUx.updateTangoEvent(event);
+    protected void onPause() {
+        super.onPause();
+        synchronized (this) {
+            if (tangoIsConnected.compareAndSet(true, false)) {
+                renderer.getCurrentScene().clearFrameCallbacks();
+                tango.disconnectCamera(ACTIVE_CAMERA_INTRINSICS);
+                connectedTextureId = INVALID_TEXTURE_ID;
+                tango.disconnect();
+                tangoUx.stop();
+            }
         }
     }
 
@@ -167,10 +154,44 @@ public class MainActivity extends AppCompatActivity implements Tango.OnTangoUpda
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFrameAvailable(int cameraId) {
+        if (cameraId == ACTIVE_CAMERA_INTRINSICS) {
+            tangoFrameIsAvailable.set(true);
+            mainSurfaceView.requestRender();
+        }
+    }
+
+    @Override
+    public void onTangoEvent(TangoEvent event) {
+        if (tangoUx != null) {
+            tangoUx.updateTangoEvent(event);
+        }
+    }
+
+    @Override
+    public void onPoseAvailable(TangoPoseData pose) {
+        if (tangoUx != null) {
+            tangoUx.updatePoseStatus(pose.statusCode);
+        }
+    }
+
+    @Override
+    public void onXyzIjAvailable(TangoXyzIjData xyzIj) {
+        if (tangoUx != null) {
+            tangoUx.updateXyzCount(xyzIj.xyzCount);
+        }
+    }
+
+    private void message(final int message_resource) {
+        Toast.makeText(this, message_resource, Toast.LENGTH_SHORT).show();
+    }
+
     protected void setupCameraProperties(Tango tango) {
         extrinsics = setupExtrinsics(tango);
         intrinsics = tango.getCameraIntrinsics(ACTIVE_CAMERA_INTRINSICS);
     }
+
 
     protected void connectTango() {
         TangoUx.StartParams params = new TangoUx.StartParams();
@@ -186,10 +207,10 @@ public class MainActivity extends AppCompatActivity implements Tango.OnTangoUpda
         setupCameraProperties(tango);
     }
 
+
     public TangoPoseData getCurrentPose() {
         return tango.getPoseAtTime(rgbFrameTimestamp, SOS_T_DEVICE_FRAME_PAIR);
     }
-
 
     protected void connectRenderer() {
         renderer.getCurrentScene().registerFrameCallback(new ScenePreFrameCallbackAdapter() {
@@ -219,35 +240,6 @@ public class MainActivity extends AppCompatActivity implements Tango.OnTangoUpda
                 }
             }
         });
-    }
-
-
-    @Override
-    public void onPoseAvailable(TangoPoseData pose) {
-        if (tangoUx != null) {
-            tangoUx.updatePoseStatus(pose.statusCode);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        synchronized (this) {
-            if (tangoIsConnected.compareAndSet(true, false)) {
-                renderer.getCurrentScene().clearFrameCallbacks();
-                tango.disconnectCamera(ACTIVE_CAMERA_INTRINSICS);
-                connectedTextureId = INVALID_TEXTURE_ID;
-                tango.disconnect();
-                tangoUx.stop();
-            }
-        }
-    }
-
-    @Override
-    public void onXyzIjAvailable(TangoXyzIjData xyzIj) {
-        if (tangoUx != null) {
-            tangoUx.updateXyzCount(xyzIj.xyzCount);
-        }
     }
 
 }

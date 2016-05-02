@@ -14,7 +14,6 @@ import de.stetro.tango.arnavigation.data.QuadTree;
 
 public class FloorPlan extends Object3D {
 
-
     private static final int MAX_VERTICES = 10000;
     private final float[] color;
     private QuadTree data;
@@ -73,10 +72,6 @@ public class FloorPlan extends Object3D {
         mGeometry.setNumIndices(pointCount);
         mGeometry.setVertices(pointCloudBuffer);
         mGeometry.changeBufferData(mGeometry.getVertexBufferInfo(), mGeometry.getVertices(), 0, pointCount * 3);
-    }
-
-    public void clear() {
-        data.clear();
     }
 
     public QuadTree getData() {
