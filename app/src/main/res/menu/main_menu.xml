@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/set_start_point"
+        android:icon="@mipmap/ic_add_location_white_24dp"
+        android:title="@string/set_start_point"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/set_end_point"
+        android:icon="@mipmap/ic_call_split_white_24dp"
+        android:title="@string/set_end_point"
+        app:showAsAction="ifRoom"/>
+
+</menu>

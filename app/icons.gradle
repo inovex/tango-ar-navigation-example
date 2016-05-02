@@ -1,0 +1,22 @@
+mdicons {
+    defcolor 'app_color', '#FFFFFF'
+    defcolor 'white', '#FFFFFF'
+    defcolor 'red', '#F44336'
+
+    assets {
+        appIcon {
+            densities 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'
+            colors 'app_color'
+            sizes '48dp'
+            names 'navigation'
+        }
+
+        toolbarIcons {
+            densities 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'
+            colors 'white'
+            sizes '24dp'
+            names 'add_location', 'call_split'
+        }
+
+    }
+}

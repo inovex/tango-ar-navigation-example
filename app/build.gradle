@@ -1,0 +1,49 @@
+apply plugin: 'android-sdk-manager'
+apply plugin: 'com.android.application'
+apply plugin: 'com.tmiyamon.mdicons'
+apply plugin: 'idea'
+
+apply from: 'icons.gradle'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "de.stetro.tango.arnavigation"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+preBuild.dependsOn installAssets
+
+dependencies {
+    // Tango Dependencies
+    compile(name: 'TangoSDK_Kajam_Java', ext: 'jar')
+    compile(name: 'TangoSupport_Kajam_Java', ext: 'aar')
+    compile(name: 'TangoUX_Kajam_Java', ext: 'aar')
+    compile project(':utils')
+
+    // UI and CG
+    compile 'org.rajawali3d:rajawali:1.0.325@aar'
+    compile 'com.jakewharton:butterknife:7.0.1'
+
+    // Support Libraries
+    compile 'com.android.support:design:24.0.0-alpha1'
+    compile 'com.android.support:recyclerview-v7:24.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:24.0.0-alpha1'
+    compile 'com.android.support:support-annotations:24.0.0-alpha1'
+}
+
+repositories {
+
+}

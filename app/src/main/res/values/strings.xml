@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AR Navigation</string>
+    <string name="set_start_point">Set Start Point</string>
+    <string name="set_end_point">Set End Point</string>
+    <string name="exception_out_of_date">Tango Version not compatible</string>
+</resources>
