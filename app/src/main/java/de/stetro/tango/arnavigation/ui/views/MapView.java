@@ -23,15 +23,18 @@ import de.stetro.tango.arnavigation.ui.util.MapTransformationGestureDetector;
 public class MapView extends View implements View.OnTouchListener, MapTransformationGestureDetector.OnMapTransformationGestureListener, QuadTree.QuadTreeDataListener {
     private static final double RECT_SIZE_CONST = 5.0;
     private static final double MAP_SCALE_CONSTANT = 30.0;
+
     private final ArrayList<Vector3> points = new ArrayList<>();
+
     private Paint paint;
     private QuadTree floorPlanData;
     private MapTransformationGestureDetector mapTransformationGestureDetector;
 
     private Matrix4 activeTransformation = Matrix4.createTranslationMatrix(new Vector3());
+
+    private Vector3 previousTranslation = new Vector3(0, 0, 0);
     private float previousScale = 1.0f;
     private float previousRotation = 0f;
-    private Vector3 previousTranslation = new Vector3(0, 0, 0);
 
 
     public MapView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -91,11 +94,6 @@ public class MapView extends View implements View.OnTouchListener, MapTransforma
                 (int) (y * MAP_SCALE_CONSTANT + RECT_SIZE_CONST), paint);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
     public void setFloorPlanData(QuadTree floorPlanData) {
         this.floorPlanData = floorPlanData;
         this.floorPlanData.setListener(this);
@@ -132,15 +130,4 @@ public class MapView extends View implements View.OnTouchListener, MapTransforma
         transformPoints();
         postInvalidate();
     }
-
-    public Matrix4 getTransformation() {
-        return activeTransformation;
-    }
-
-    public void setTransformation(Matrix4 transformation) {
-        this.activeTransformation = transformation;
-        transformPoints();
-        postInvalidate();
-    }
-
 }
