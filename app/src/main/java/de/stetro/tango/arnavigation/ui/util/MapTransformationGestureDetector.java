@@ -49,10 +49,8 @@ public class MapTransformationGestureDetector {
                     nfY = event.getY(event.findPointerIndex(ptrID2));
 
                     angle = angleBetweenLines(fX, fY, sX, sY, nfX, nfY, nsX, nsY);
-                    float newScale = scaleBetweenLines(fX, fY, sX, sY, nfX, nfY, nsX, nsY);
-                    if (newScale > 0) {
-                        scale = newScale;
-                    }
+                    scale = scaleBetweenLines(fX, fY, sX, sY, nfX, nfY, nsX, nsY);
+
                     translation = new Vector3((nfX - fX + nsX - sX) / 2, (nfY - fY + nsY - sY) / 2, 0);
 
                     if (mListener != null) {

@@ -33,17 +33,14 @@ import de.stetro.tango.arnavigation.data.QuadTree;
 
 
 public class SceneRenderer extends RajawaliRenderer {
-    public static final int QUAD_TREE_START = -80;
-    public static final int QUAD_TREE_RANGE = 160;
+    public static final int QUAD_TREE_START = -60;
+    public static final int QUAD_TREE_RANGE = 120;
     private static final String TAG = SceneRenderer.class.getSimpleName();
     private final QuadTree data;
     // Rajawali texture used to render the Tango color camera
     private ATexture mTangoCameraTexture;
     // Keeps track of whether the scene camera has been configured
     private boolean mSceneCameraConfigured;
-    private List<Cube> cubes = new ArrayList<>();
-    private Material red;
-    private Pose newCubePose;
 
     private FloorPlan floorPlan;
     private Pose startPoint;
@@ -84,9 +81,6 @@ public class SceneRenderer extends RajawaliRenderer {
         light.setPosition(3, 2, 4);
         getCurrentScene().addLight(light);
 
-
-        red = new Material();
-        red.setColor(Color.RED);
         blue = new Material();
         blue.setColor(Color.BLUE);
 
@@ -157,17 +151,6 @@ public class SceneRenderer extends RajawaliRenderer {
     @Override
     protected void onRender(long ellapsedRealtime, double deltaTime) {
         super.onRender(ellapsedRealtime, deltaTime);
-        // add a new annotation cube to scene graph if available
-        if (newCubePose != null) {
-            Cube cube = new Cube(0.2f);
-            cube.setMaterial(red);
-            cube.setPosition(newCubePose.getPosition());
-            cube.setOrientation(newCubePose.getOrientation());
-            cubes.add(cube);
-            getCurrentScene().addChild(cube);
-            newCubePose = null;
-        }
-
         // add routing cubes to scene graph if available
         if (fillPath) {
             for (Cube pathCube : pathCubes) {
@@ -178,7 +161,7 @@ public class SceneRenderer extends RajawaliRenderer {
             try {
                 List<Vector2> path = finder.findPathBetween(startPoint.getPosition(), endPoint.getPosition());
                 for (Vector2 vector2 : path) {
-                    Cube cube = new Cube(0.1f);
+                    Cube cube = new Cube(0.2f);
                     cube.setMaterial(blue);
                     cube.setPosition(new Vector3(vector2.getX(), -1.2, vector2.getY()));
                     getCurrentScene().addChild(cube);
