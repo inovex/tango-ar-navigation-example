@@ -13,4 +13,5 @@ finding navigation using Project Tango.
  
 ### Development
 
-Missing assets can be installed by `./gradlew installAssets`
+* Missing assets can be installed by `./gradlew installAssets`
+* This project still depends on the android gradle plugin `1.5.0` because to the missing sdkmanager plugin release
